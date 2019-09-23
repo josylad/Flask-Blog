@@ -9,9 +9,12 @@ import secrets
 from PIL import Image
 from flask_mail import Message
 from ..email import mail_message
+from app.request import get_quote
+
 # from app import mail
 
 users = Blueprint('users', __name__)
+quotes = get_quote()
 
 
 @users.route("/register", methods=['GET', 'POST'])
@@ -29,7 +32,7 @@ def register():
         # mail_message("Welcome to FLASK BLOG","email/welcome_user",user.email,user=user)
 
         return redirect(url_for('users.login'))
-    return render_template('register.html', title='Register', form=form)
+    return render_template('register.html', title='Register', form=form, quotes=quotes)
 
 
 @users.route("/login", methods=['GET', 'POST'])
@@ -45,7 +48,7 @@ def login():
             return redirect(next_page) if next_page else redirect(url_for('main.home'))
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
-    return render_template('login.html', title='Login', form=form)
+    return render_template('login.html', title='Login', form=form, quotes=quotes)
 
 
 @users.route("/logout")
@@ -81,6 +84,7 @@ def account():
         current_user.username = form.username.data
         current_user.email = form.email.data
         current_user.fullname = form.fullname.data
+        current_user.bio = form.bio.data
         current_user.facebook = form.facebook.data
         current_user.twitter = form.twitter.data
         current_user.github = form.github.data
@@ -94,6 +98,7 @@ def account():
         form.username.data = current_user.username
         form.email.data = current_user.email
         form.fullname.data = current_user.fullname
+        form.bio.data = current_user.bio
         form.facebook.data = current_user.facebook
         form.twitter.data = current_user.twitter
         form.github.data = current_user.github
@@ -103,13 +108,15 @@ def account():
     user = User.query.filter_by(username=current_user.username).first_or_404()
     posts = Post.query.filter_by(author=user).order_by(Post.posted_date.desc()).all()
     print('--------', posts)
+    myposts = Post.query.order_by(Post.posted_date.desc())
     image_file = url_for('static', filename='profile_pics/' + current_user.image)
-    return render_template('account.html', title='Account', posts=posts, user=user, image_file=image_file, form=form)
+    return render_template('account.html', title='Account', posts=posts, user=user, image_file=image_file, form=form, myposts=myposts, quotes=quotes)
 
 
 @users.route("/user/<string:username>")
 def user_posts(username):
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
-    posts = Post.query.filter_by(author=user).order_by(Post.posted_date.desc()).paginate(page=page, per_page=10)
-    return render_template('userposts.html', posts=posts, user=user)
+    posts = Post.query.filter_by(author=user).order_by(Post.posted_date.desc()).paginate(page=page, per_page=7)
+    myposts = Post.query.order_by(Post.posted_date.desc())
+    return render_template('userposts.html', posts=posts, user=user, myposts=myposts, quotes=quotes)
