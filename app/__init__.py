@@ -7,6 +7,7 @@ from flask_migrate import Migrate
 from app.config import config_options
 from flask_mail import Mail
 from app import error
+from flask_simplemde import SimpleMDE
 
 
 login_manager = LoginManager()
@@ -18,6 +19,8 @@ app = Flask(__name__)
 mail = Mail()
 db = SQLAlchemy()
 bcrypt = Bcrypt()
+SimpleMDE(app)
+
 
 
 
@@ -34,6 +37,7 @@ def create_app(config_name):
     bcrypt.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
+    
     
     from app.users.views import users 
     from app.posts.views import posts
