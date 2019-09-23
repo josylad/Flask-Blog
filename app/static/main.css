@@ -4,7 +4,6 @@ html, body {
 }
 
 body {
-    background: #fafafa;
     color: #333333;
     margin-top: 5rem;
   }
@@ -91,6 +90,8 @@ body {
 
   a {
     cursor: pointer;
-    color: #00C851 !important;
+    color: rgb(3, 167, 68);
 }
- 
+ p {
+   font-size: 18px;
+ }
