@@ -6,7 +6,7 @@ from app.models import Quote
 
 def get_quote():
     
-    get_quote_url = os.environ.get("QUOTE_URL")
+    get_quote_url = 'http://quotes.stormconsultancy.co.uk/random.json'
 
     with urllib.request.urlopen(get_quote_url) as url:
         quote_details_data = url.read()
