@@ -4,7 +4,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextA
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Optional, URL
 from flask_login import current_user
 from app.models import User
-from flask_ckeditor import CKEditor, CKEditorField
+
 
 
 class RegistrationForm(FlaskForm):
