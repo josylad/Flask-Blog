@@ -106,7 +106,9 @@
                     <p>Posted by: {{comment.author.username}}</p>
                     <h4> {{ comment.comment }} </h4>
                 </ul>
-            
+                {%if current_user.is_authenticated and current_user.id == post.user_id %}
+                <a href="{{url_for('posts.deleteComment', comment_id=comment.id, post_id=post.id)}}"><button class="btn btn-danger btn-sm m-1 mb-1">Delete</button></a>
+                {%endif%}
             {% endfor %} 
             {% else %}
                 <p>No comments</p>
