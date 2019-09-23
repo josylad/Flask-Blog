@@ -26,8 +26,11 @@
          <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
          <!-- MDB core JavaScript -->
          <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.9/js/mdb.min.js"></script>
+         
          <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
 
+        {{ simplemde.css }}
+        {{ simplemde.js }}
     </head>
 
     <body>
@@ -60,28 +63,60 @@
                 
                 {% endblock content %}
                 </div>
-                <div class="col-md-3 mt-5 pt-5">
+                <div class="col-md-3 mt-2 pt-2">
                 <div class="content-section">
-                    <h3>Categories</h3>
-                    <p class='text-muted'>Filter based on Categories.
-                    <ul class="list-group">
+
+                    <!-- Default form subscription -->
+<form class="text-center border border-light p-5" action="">
+
+        <p class="h4 mb-4">Subscribe</p>
+    
+        <p>Join our mailing list. We write rarely, but only the best content.</p>
+    
+        <!-- <p>
+            <a href="" target="_blank">See the last newsletter</a>
+        </p> -->
+    
+        <!-- Name -->
+        <input type="text" id="defaultSubscriptionFormPassword" class="form-control mb-4" placeholder="Name">
+    
+        <!-- Email -->
+        <input type="email" id="defaultSubscriptionFormEmail" class="form-control mb-4" placeholder="E-mail">
+    
+        <!-- Sign in button -->
+        <a href="/subscribe"> <button class="btn btn-info btn-block" >Sign Up</button></a>
+    
+    
+    </form>
+    <!-- Default form subscription -->
+
+                    <h3 class="mt-2 pt-2">Latest Posts</h3>
+
+                    {% for post in myposts %}
+                    <!-- <p> <a href="/post/{{post.category}}">{{post.category}}</a> </p> -->
+                    <p> <a href="/post/{{post.id}}">{{post.title}}</a> </p>
+                                    
+                     {% endfor %}
+                    <!-- <p class='text-muted'>Filter based on Categories. -->
+                    <!-- <ul class="list-group">
                         <li class="list-group-item list-group-item-light"><a href="/post/Product%20Pitch">Product Pitch</a> </li>
                         <li class="list-group-item list-group-item-light"><a href="/post/Interview%20Pitch">Interview Pitch</a> </li>
                         <li class="list-group-item list-group-item-light"><a href="/post/Sales">Sales Pitch</a> </li>
                         <li class="list-group-item list-group-item-light"><a href="/post/Business%20Pitch">Business Pitch</a> </li>
-                    </ul>
+                    </ul> -->
                     </p>
                 </div>
-                </div>
-            </div>
-            <div class="quotes">
+                <div class="quotes">
 
-                {% for quote in quotes %}
-                <p> quote.quote</p>
-                <p> quote.author</p>                
-   {% endfor %}
+                    <h3>Random Quote</h3>
+                        <p> {{quotes.quote}}</p>
+                        <p> {{quotes.author}}</p>                
+        
+                    </div>
 
             </div>
+            </div>
+            
         </main>
       <!-- Footer -->
 <footer class="page-footer font-small success-color-dark mt-4 pt-4">
