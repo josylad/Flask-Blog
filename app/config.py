@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from flask_simplemde import SimpleMDE
 
 load_dotenv()
 
@@ -10,7 +11,7 @@ class Config:
     
     
     #  email configurations
-    MAIL_SERVER = 'smtp.googlemail.com'
+    MAIL_SERVER = 'smtp.gmail.com'
     MAIL_PORT = 465
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
