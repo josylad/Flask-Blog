@@ -1,26 +1,59 @@
 {% extends "layout.html" %}
 
 {% block content%} 
-    <h2 class="mb-4 mt-4 pt-2"> {{ posts.total }} Posts by {{user.username}} </h2>
+    <h2 class="mb-4 mt-4 pt-2"> {{ posts.total }} Posts by {{user.fullname}} </h2>
 
     {% for post in posts.items %}
 
-    <article class="media content-section">
-      <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image) }}" alt="{{ post.author.username }} profile photo">
-            <div class="media-body">
-              <div class="article-metadata">
-                <a class="mr-2" href="{{ url_for('users.user_posts', username=post.author.username) }}">{{ post.author.username }}</a>
-                <small class="text-muted mr-2">{{ post.posted_date.strftime('%Y-%m-%d') }}</small>
-                <small>Posted in: <a class="mr-2" href="{{ url_for('posts.category_post', category=post.category) }}">{{ post.category }}</a></small>
+     <!-- Section: Blog v.3 -->
+<section class="my-5">
 
-              </div>
-              <h2><a class="article-title mt-2" href="{{ url_for('posts.post', post_id=post.id) }}">{{ post.title }}</a></h2>
-              <p class="article-content">{{ post.content }}</p>
-            </div>
-            <p class="article-footer"><a class="ratings" href="{{ url_for('posts.new_comment', post_id=post.id) }}"> Leave a comment</a></p>
-
-
-    </article>
+    <div class="row">
+  
+      <!-- Grid column -->
+      <div class="col-lg-5 col-xl-4">
+  
+        <!-- Featured image -->
+        <div class="view overlay rounded z-depth-2 mb-lg-0 mb-4">
+            {% if post.image %}
+            <img class="img-fluid" src="{{ url_for('static', filename='featured_images/')}}{{post.image}}" alt="{{post.title}} image">
+            {% else %}
+            <img class="img-fluid" src="{{ url_for('static', filename='featured_images/')}}default.jpg" alt="{{post.title}} image">
+            {% endif %}
+          <a>
+            <div class="mask rgba-white-slight"></div>
+          </a>
+        </div>
+  
+      </div>
+      <!-- Grid column -->
+  
+      <!-- Grid column -->
+      <div class="col-lg-7 col-xl-8">
+        <!-- <a href="{{ url_for('posts.category_post', category=post.category) }}" class="green-text">
+          <h6 class="font-weight-bold mb-3"> {{ post.category }}</h6>
+        </a> -->
+        <!-- Post title -->
+        <h3><a class="font-weight-bold mb-3 black-text" href="{{ url_for('posts.post', post_id=post.id) }}">{{ post.title }}</a></h3>
+        <!-- Excerpt -->
+        <p class="dark-grey-text">{{ post.content | truncate(400) }}</p>
+        <!-- Post data -->
+        <p>by <a class="font-weight-bold" href="{{ url_for('users.user_posts', username=post.author.username) }}">{{ post.author.fullname }}</a>, {{ post.posted_date.strftime('%Y-%m-%d') }} 
+          <span class="ml-4"></span> Category: <a href="{{ url_for('posts.category_post', category=post.category) }}" class="green-text">
+           <span class="font-weight-bold mb-3"> {{ post.category }}</span>
+        </p>
+        <!-- Read more button -->
+        <a class="btn success-color-dark text-white btn-md" href="{{ url_for('posts.post', post_id=post.id) }}">Read more</a>
+  
+      </div>
+      <!-- Grid column -->
+  
+    </div>
+    <!-- Grid row -->
+  
+    <hr class="my-5">
+  
+  </section>
     {% endfor %}
     {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
       {% if page_num %}
