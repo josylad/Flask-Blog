@@ -15,6 +15,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(225), unique=True, nullable=False)
     fullname = db.Column(db.String(), nullable=False)
     email = db.Column(db.String(255), unique= True, nullable= False, index = True)
+    bio = db.Column(db.String(255))
     image = db.Column(db.String(225), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
     facebook = db.Column(db.String())
@@ -34,7 +35,7 @@ class Post(db.Model):
     title = db.Column(db.String(255), nullable=False)
     posted_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     content = db.Column(db.Text, nullable=False)
-    image = db.Column(db.String(225))
+    image = db.Column(db.String(225), default='default.jpg')
     category = db.Column(db.String(255), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     comments = db.relationship('Comment', backref='post', lazy=True)
@@ -46,6 +47,7 @@ class Post(db.Model):
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    fullname = db.Column(db.String(255))
     comment = db.Column(db.Text, nullable=False)
     posted_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
