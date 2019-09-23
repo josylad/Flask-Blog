@@ -5,6 +5,7 @@ from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationE
 from app.models import User
 from flask_login import current_user
 from flask_ckeditor import CKEditor, CKEditorField
+from flask_simplemde import SimpleMDE
 
 
 class PostForm(FlaskForm):

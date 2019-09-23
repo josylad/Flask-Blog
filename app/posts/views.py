@@ -10,6 +10,7 @@ from app.models import Post, User, Comment
 from app.posts.forms import PostForm, CommentForm
 from app.request import get_quote
 from flask_simplemde import SimpleMDE
+from ..main import views
 
 
 posts = Blueprint('posts', __name__)
@@ -37,11 +38,12 @@ def new_post():
     form = PostForm()
     
     if form.validate_on_submit():
+        pic =None
         if form.image.data:
             picture_file = save_picture(form.image.data)
             final_pic = picture_file
-            
-        post = Post(title=form.title.data, content=form.content.data, author=current_user, category=form.category.data, image=final_pic)
+            pic= final_pic
+        post = Post(title=form.title.data, content=form.content.data, author=current_user, category=form.category.data, image=pic)
         db.session.add(post)
         db.session.commit()
         flash('Your post has been published!', 'success')
@@ -66,10 +68,16 @@ def update_post(post_id):
     if post.author != current_user:
         abort(403)
     form = PostForm()
-    if form.validate_on_submit():  
+    if form.validate_on_submit():
+        if form.image.data:
+            picture_file = save_picture(form.image.data)
+            final_pic = picture_file
+             
+             
         post.title = form.title.data
         post.content = form.content.data
         post.category = form.category.data
+        post.image = final_pic
         db.session.commit()
         flash('Your post has been updated!', 'success')
         return redirect(url_for('posts.post', post_id=post.id))
@@ -118,17 +126,14 @@ def new_comment(post_id):
     return render_template('new-comment.html', title='New Comment', form=form, legend='New Comment', myposts=myposts, quotes=quotes)
 
 
-# @posts.route("/post/<int:post_id>/delete", methods=['POST'])
-# @login_required
-# def delete_comment(post_id):
-#     post = Post.query.get_or_404(post_id)
-#     comments = Comment.query.filter_by(id = id).all()
-#     if post.author != current_user:
-#         abort(403)
-#     db.session.delete(comments)
-#     db.session.commit()
-#     flash('The comment has been deleted!', 'success')
-#     return redirect(url_for('posts.post', post_id=post.id))
+@posts.route('/deleteComment/<int:comment_id>/<int:post_id>', methods=["GET", "POST"])
+def deleteComment(comment_id, post_id):
+    post = Post.query.get_or_404(post_id)
+    
+    comment = Comment.query.filter_by(id=comment_id).first()
+    db.session.delete(comment)
+    db.session.commit()
+    return redirect(url_for("posts.post", post_id=post.id))
 
 
 @posts.route("/comment/<int:id>")
